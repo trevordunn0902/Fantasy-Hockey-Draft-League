@@ -23,16 +23,6 @@ Backend:
 Database:
 - PostgreSQL
 
-Deployment:
-- AWS Elastic Beanstalk
-- AWS RDS
-- CloudFront
-- S3
-
-## Screenshots
-
-(add screenshots)
-
 ## Running Locally
 
 Frontend:
