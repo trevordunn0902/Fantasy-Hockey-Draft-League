@@ -3,7 +3,7 @@ import axios from "axios";
 
 // Base URL for your backend
 const API = axios.create({
-  baseURL: "http://localhost:8080/api",
+  baseURL: import.meta.env.VITE_API_URL,
   withCredentials: true, // if your backend uses cookies for auth
 });
 

@@ -29,7 +29,7 @@ public class SecurityConfig {
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOriginPatterns(List.of("http://localhost:5173")); // explicit origin(s)
+        config.setAllowedOriginPatterns(List.of("http://localhost:5173", "https://hockey.trevor-dunn.com")); // explicit origin(s)
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowCredentials(true);
         config.setAllowedHeaders(List.of("*"));
