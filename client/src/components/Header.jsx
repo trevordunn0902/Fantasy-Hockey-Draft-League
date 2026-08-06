@@ -15,7 +15,7 @@ const Header = () => {
   return (
     <header className="app-header">
   <div className="logo">
-    <Link to="/">Fantasy NHL</Link>
+    <Link to="/">Trevor's Fantasy Hockey Draft</Link>
   </div>
   <nav>
     <Link to="/" className="btn btn-purple">Home</Link>
