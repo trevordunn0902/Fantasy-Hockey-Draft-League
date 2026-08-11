@@ -38,7 +38,7 @@ const PlayerCard = ({
       </div>
 
       <div className="player-name">
-        {player.playerName}
+        {player.playerName || player.name}
       </div>
 
       <div className="player-team-name">
