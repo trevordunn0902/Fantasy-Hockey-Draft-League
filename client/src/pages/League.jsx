@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getLeagueByInviteCode, startDraft, getDraftStatus, getTeamById } from "../api/api";
+import { getLeagueById, startDraft, getDraftStatus, getTeamById } from "../api/api";
 import TeamCard from "../components/TeamCard";
 import { AuthContext } from "../context/AuthContext";
 import "../styles/pages.css";
 
 const League = () => {
-  const { inviteCode } = useParams();
+  const { leagueId } = useParams();
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
 
@@ -19,7 +19,7 @@ const League = () => {
   // Fetch league and leaderboard
   const fetchLeague = async () => {
     try {
-      const res = await getLeagueByInviteCode(inviteCode);
+      const res = await getLeagueById(leagueId);
       setLeague(res);
 
       const draftStatus = await getDraftStatus(res.id);
@@ -67,11 +67,14 @@ const League = () => {
 
   // Auto-refresh league every 2–3 seconds
   useEffect(() => {
-    if (!inviteCode) return;
+    if (!leagueId) return;
+
     fetchLeague();
-    const interval = setInterval(fetchLeague, 3000); // Poll every 3s
+
+    const interval = setInterval(fetchLeague, 3000);
+
     return () => clearInterval(interval);
-  }, [inviteCode]);
+  }, [leagueId]);
 
   if (error) return <p className="error-text p-4">{error}</p>;
   if (!league) return <p className="p-4">Loading...</p>;
@@ -83,9 +86,11 @@ const League = () => {
       {/* Top Section */}
       <div className="text-center mb-8">
         <h1 className="page-title">{league.name}</h1>
-        <p>
-          Invite Code: <span className="font-mono">{league.inviteCode}</span>
-        </p>
+        {isMember && (
+          <p>
+            Invite Code: <span className="font-mono">{league.inviteCode}</span>
+          </p>
+        )}
       </div>
 
       {/* Middle Section */}

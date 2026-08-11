@@ -21,7 +21,7 @@ function App() {
       <main className="main-content">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/league/:inviteCode" element={<League />} />
+          <Route path="/league/:leagueId" element={<League />} />
           <Route path="/draft/:leagueId" element={<Draft />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />

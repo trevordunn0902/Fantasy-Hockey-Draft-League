@@ -60,6 +60,15 @@ export const getLeagueByInviteCode = async (inviteCode) => {
   }
 };
 
+export const getLeagueById = async (leagueId) => {
+  try {
+    const response = await API.get(`/league/${leagueId}`);
+    return response.data;
+  } catch (err) {
+    throw err.response?.data || { message: "Failed to fetch league" };
+  }
+};
+
 export const getAllLeagues = async () => {
   try {
     const response = await API.get("/league/all");

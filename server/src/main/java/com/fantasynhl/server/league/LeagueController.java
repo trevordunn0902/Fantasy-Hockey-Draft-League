@@ -78,6 +78,15 @@ public class LeagueController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // Get league info by ID
+    @GetMapping("/{id}")
+    public ResponseEntity<LeagueDTO> getLeagueById(@PathVariable Long id) {
+        return leagueService.getLeagueById(id)
+                .map(LeagueDTO::new)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     // Fetch all leagues
     @GetMapping("/all")
     public ResponseEntity<List<LeagueDTO>> getAllLeagues() {

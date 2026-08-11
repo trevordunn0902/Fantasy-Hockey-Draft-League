@@ -55,6 +55,11 @@ public class LeagueService {
         return leagueRepository.findByInviteCode(inviteCode);
     }
 
+    // Fetch league by ID
+    public Optional<League> getLeagueById(Long id) {
+        return leagueRepository.findById(id);
+    }
+
     // Fetch all leagues
     public List<League> getAllLeagues() {
         return leagueRepository.findAll();
