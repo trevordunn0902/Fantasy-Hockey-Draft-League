@@ -24,7 +24,7 @@ const Home = () => {
 
   return (
     <div className="page-container p-4">
-      <h1 className="page-title">Welcome {user ? user.email : "Guest"}</h1>
+      <h1 className="page-title">Welcome {user ? user.username : "Guest"}</h1>
 
       {error && <p className="error-text">{error}</p>}
 

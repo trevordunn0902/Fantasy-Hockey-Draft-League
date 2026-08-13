@@ -8,10 +8,10 @@ const API = axios.create({
 });
 
 // --- User Auth ---
-export const registerUser = async (email, password) => {
+export const registerUser = async (username, email, password) => {
   try {
     const response = await API.post("/auth/register", null, {
-      params: { email, password },
+      params: { username, email, password },
     });
     return response.data;
   } catch (err) {
@@ -19,10 +19,10 @@ export const registerUser = async (email, password) => {
   }
 };
 
-export const loginUser = async (email, password) => {
+export const loginUser = async (username, password) => {
   try {
     const response = await API.post("/auth/login", null, {
-      params: { email, password },
+      params: { username, password },
     });
     return response.data;
   } catch (err) {

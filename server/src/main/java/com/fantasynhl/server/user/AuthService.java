@@ -13,13 +13,20 @@ public class AuthService {
     }
 
     // Register a new user
-    public User register(String email, String password) {
-        Optional<User> existing = userRepository.findByEmail(email);
-        if (existing.isPresent()) {
-            throw new RuntimeException("User already exists");
+    public User register(String username, String email, String password) {
+
+        Optional<User> existingUsername = userRepository.findByUsername(username);
+        if (existingUsername.isPresent()) {
+            throw new RuntimeException("Username already exists");
+        }
+
+        Optional<User> existingEmail = userRepository.findByEmail(email);
+        if (existingEmail.isPresent()) {
+            throw new RuntimeException("Email already exists");
         }
 
         User user = new User();
+        user.setUsername(username);
         user.setEmail(email);
         user.setPassword(password); // plain text for now
         user.setRole(Role.USER);
@@ -28,8 +35,9 @@ public class AuthService {
     }
 
     // Login existing user
-    public User login(String email, String password) {
-        User user = userRepository.findByEmail(email)
+    public User login(String username, String password) {
+
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         if (!user.getPassword().equals(password)) {

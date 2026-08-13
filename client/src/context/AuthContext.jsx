@@ -7,6 +7,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(
     JSON.parse(localStorage.getItem("fantasyUser")) || null
   );
+
   useEffect(() => {
     if (user) {
       localStorage.setItem("fantasyUser", JSON.stringify(user));
@@ -15,14 +16,14 @@ export const AuthProvider = ({ children }) => {
     }
   }, [user]);
 
-  const login = async (email, password) => {
-    const userData = await loginUser(email, password);
+  const login = async (username, password) => {
+    const userData = await loginUser(username, password);
     setUser(userData);
     return userData;
   };
 
-  const register = async (email, password) => {
-    const userData = await registerUser(email, password);
+  const register = async (username, email, password) => {
+    const userData = await registerUser(username, email, password);
     setUser(userData);
     return userData;
   };

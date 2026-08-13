@@ -1,12 +1,13 @@
 package com.fantasynhl.server.user;
 
 import com.fantasynhl.server.league.Team;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "users") // Avoid reserved word "user"
+@Table(name = "users")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "teams"})
 public class User {
 
@@ -15,29 +16,35 @@ public class User {
     private Long id;
 
     @Column(nullable = false, unique = true)
+    private String username;
+
+    @Column(nullable = false, unique = true)
     private String email;
 
-    // Plain text for v1/v2 simplicity (replace with hashed passwords in production)
+    // Plain text for v1/v2 simplicity
+    @JsonIgnore
     private String password;
 
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    // One user can own many teams
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Team> teams;
 
     public User() {}
 
-    public User(String email, String password, Role role) {
+    public User(String username, String email, String password, Role role) {
+        this.username = username;
         this.email = email;
         this.password = password;
         this.role = role;
     }
 
-    // Getters / Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
+
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }

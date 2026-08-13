@@ -15,15 +15,22 @@ public class AuthController {
 
     // Register a new user
     @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestParam String email, @RequestParam String password) {
-        User user = authService.register(email, password);
+    public ResponseEntity<User> register(
+            @RequestParam String username,
+            @RequestParam String email,
+            @RequestParam String password) {
+
+        User user = authService.register(username, email, password);
         return ResponseEntity.ok(user);
     }
 
     // Login existing user
     @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestParam String email, @RequestParam String password) {
-        User user = authService.login(email, password);
+    public ResponseEntity<User> login(
+            @RequestParam String username,
+            @RequestParam String password) {
+
+        User user = authService.login(username, password);
         return ResponseEntity.ok(user);
     }
 }
