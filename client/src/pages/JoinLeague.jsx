@@ -77,7 +77,7 @@ const JoinLeague = () => {
             </button>
             <button
               className="modal-btn bg-green-600"
-              onClick={() => navigate(`/league/${joinedLeague.inviteCode}`)}
+              onClick={() => navigate(`/league/${joinedLeague.id}`)}
             >
               Go to League
             </button>

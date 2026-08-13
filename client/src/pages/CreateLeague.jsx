@@ -15,6 +15,7 @@ const CreateLeague = () => {
   const [showModal, setShowModal] = useState(false);
   const [inviteCode, setInviteCode] = useState("");
   const [createdLeagueName, setCreatedLeagueName] = useState("");
+  const [createdLeagueId, setCreatedLeagueId] = useState(null);
 
   if (!user) {
     return (
@@ -43,6 +44,7 @@ const CreateLeague = () => {
 
       setInviteCode(leagueData.inviteCode);
       setCreatedLeagueName(leagueData.name);
+      setCreatedLeagueId(leagueData.id);
       setShowModal(true);
 
       localStorage.setItem("lastCreatedLeague", JSON.stringify(leagueData));
@@ -105,7 +107,7 @@ const CreateLeague = () => {
 
               <button
                 className="modal-btn bg-green-600"
-                onClick={() => navigate(`/league/${inviteCode}`)}
+                onClick={() => navigate(`/league/${createdLeagueId}`)}
               >
                 Go to League
               </button>
