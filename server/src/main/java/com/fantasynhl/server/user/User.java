@@ -21,7 +21,7 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    // Plain text for v1/v2 simplicity
+    // BCrypt-hashed password
     @JsonIgnore
     private String password;
 
