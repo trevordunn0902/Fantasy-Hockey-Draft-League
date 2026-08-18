@@ -44,4 +44,27 @@ public class AuthController {
                 "If an account exists with that email address, your username has been sent."
         );
     }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<String> forgotPassword(
+            @RequestParam String email) {
+
+        authService.forgotPassword(email);
+
+        return ResponseEntity.ok(
+                "If an account exists with that email address, a password reset link has been sent."
+        );
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(
+            @RequestParam String token,
+            @RequestParam String newPassword) {
+
+        authService.resetPassword(token, newPassword);
+
+        return ResponseEntity.ok(
+                "Password has been reset successfully."
+        );
+    }
 }

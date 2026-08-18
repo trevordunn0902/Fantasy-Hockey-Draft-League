@@ -41,6 +41,28 @@ export const forgotUsername = async (email) => {
   }
 };
 
+export const forgotPassword = async (email) => {
+  try {
+    const response = await API.post("/auth/forgot-password", null, {
+      params: { email },
+    });
+    return response.data;
+  } catch (err) {
+    throw err.response?.data || { message: "Failed to send password reset email" };
+  }
+};
+
+export const resetPassword = async (token, newPassword) => {
+  try {
+    const response = await API.post("/auth/reset-password", null, {
+      params: { token, newPassword },
+    });
+    return response.data;
+  } catch (err) {
+    throw err.response?.data || { message: "Failed to reset password" };
+  }
+};
+
 // --- League Management ---
 export const createLeague = async (name) => {
   try {

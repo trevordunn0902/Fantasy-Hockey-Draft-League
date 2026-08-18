@@ -53,8 +53,18 @@ const Login = () => {
           Login
         </button>
       </form>
-      <button type="button" onClick={() => navigate("/forgot-username")}>
+      <button 
+        type="button" 
+        onClick={() => navigate("/forgot-username")}
+      >
         Forgot Username?
+      </button>
+      <button
+        type="button"
+        onClick={() => navigate("/forgot-password")}
+        className="secondary-button"
+      >
+        Forgot Password?
       </button>
     </div>
   );
