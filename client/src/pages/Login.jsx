@@ -53,6 +53,9 @@ const Login = () => {
           Login
         </button>
       </form>
+      <button type="button" onClick={() => navigate("/forgot-username")}>
+        Forgot Username?
+      </button>
     </div>
   );
 };

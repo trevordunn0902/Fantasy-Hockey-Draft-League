@@ -10,12 +10,15 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
     public AuthService(UserRepository userRepository,
-                       PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
+                   PasswordEncoder passwordEncoder,
+                   EmailService emailService) {
+    this.userRepository = userRepository;
+    this.passwordEncoder = passwordEncoder;
+    this.emailService = emailService;
+}
 
     // Register a new user
     public User register(String username, String email, String password) {
@@ -54,5 +57,17 @@ public class AuthService {
         }
 
         return user;
+    }
+
+    public void forgotUsername(String email) {
+
+        Optional<User> user = userRepository.findByEmail(email);
+
+        if (user.isPresent()) {
+            emailService.sendUsernameEmail(
+                    user.get().getEmail(),
+                    user.get().getUsername()
+            );
+        }
     }
 }

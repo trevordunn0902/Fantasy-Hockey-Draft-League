@@ -33,4 +33,15 @@ public class AuthController {
         User user = authService.login(username, password);
         return ResponseEntity.ok(user);
     }
+
+    @PostMapping("/forgot-username")
+    public ResponseEntity<String> forgotUsername(
+            @RequestParam String email) {
+
+        authService.forgotUsername(email);
+
+        return ResponseEntity.ok(
+                "If an account exists with that email address, your username has been sent."
+        );
+    }
 }

@@ -30,6 +30,17 @@ export const loginUser = async (username, password) => {
   }
 };
 
+export const forgotUsername = async (email) => {
+  try {
+    const response = await API.post("/auth/forgot-username", null, {
+      params: { email },
+    });
+    return response.data;
+  } catch (err) {
+    throw err.response?.data || { message: "Failed to recover username" };
+  }
+};
+
 // --- League Management ---
 export const createLeague = async (name) => {
   try {
