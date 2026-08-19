@@ -9,12 +9,14 @@ const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     setMessage("");
     setError("");
+    setLoading(true);
 
     try {
       const response = await forgotPassword(email);
@@ -24,6 +26,8 @@ const ForgotPassword = () => {
       );
     } catch {
       setError("Unable to process password reset request.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -39,6 +43,7 @@ const ForgotPassword = () => {
       {message && <p className="success-text">{message}</p>}
       {error && <p className="error-text">{error}</p>}
 
+    {!message && (
       <form onSubmit={handleSubmit} className="auth-form">
         <div>
           <label>Email</label>
@@ -50,10 +55,11 @@ const ForgotPassword = () => {
           />
         </div>
 
-        <button type="submit" className="bg-blue-600">
-          Send Reset Link
+        <button type="submit" className="bg-blue-600" disabled={loading}>
+          {loading ? "Sending..." : "Send Reset Link"}
         </button>
       </form>
+    )}
 
       <button
         type="button"
