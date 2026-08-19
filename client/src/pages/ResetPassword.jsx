@@ -13,6 +13,7 @@ const ResetPassword = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,6 +31,8 @@ const ResetPassword = () => {
       return;
     }
 
+    setLoading(true);
+
     try {
       const response = await resetPassword(token, password);
 
@@ -42,6 +45,8 @@ const ResetPassword = () => {
         err?.message ||
           "Unable to reset password. The link may be invalid or expired."
       );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -54,31 +59,33 @@ const ResetPassword = () => {
       {message && <p className="success-text">{message}</p>}
       {error && <p className="error-text">{error}</p>}
 
-      <form onSubmit={handleSubmit} className="auth-form">
-        <div>
-          <label>New Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
+      {!message && (
+        <form onSubmit={handleSubmit} className="auth-form">
+          <div>
+            <label>New Password</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
 
-        <div>
-          <label>Confirm New Password</label>
-          <input
-            type="password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-          />
-        </div>
+          <div>
+            <label>Confirm New Password</label>
+            <input
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            />
+          </div>
 
-        <button type="submit" className="bg-blue-600">
-          Reset Password
-        </button>
-      </form>
+          <button type="submit" className="bg-blue-600" disabled={loading}>
+            {loading ? "Resetting..." : "Reset Password"}
+          </button>
+        </form>
+      )}
 
       <button
         type="button"

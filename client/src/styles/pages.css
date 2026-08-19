@@ -959,8 +959,10 @@
 
 .success-text {
   margin-top: 15px;
+  color: #4ade80;
 }
 
 .error-text {
   margin-top: 15px;
+  color: #f87171;
 }

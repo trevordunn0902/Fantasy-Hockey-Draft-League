@@ -39,9 +39,9 @@ const ForgotUsername = () => {
         your username to you.
       </p>
 
+      {message && <p className="success-text">{message}</p>}
       {error && <p className="error-text">{error}</p>}
-      {message && <p>{message}</p>}
-
+      
       {!message && (
         <form onSubmit={handleSubmit} className="auth-form">
           <div>
