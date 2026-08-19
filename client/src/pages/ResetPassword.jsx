@@ -46,7 +46,7 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className="create-league-page">
+    <div className="create-league-page auth-page">
       <h1>Reset Password</h1>
 
       <p>Enter your new password below.</p>
@@ -54,7 +54,7 @@ const ResetPassword = () => {
       {message && <p className="success-text">{message}</p>}
       {error && <p className="error-text">{error}</p>}
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="auth-form">
         <div>
           <label>New Password</label>
           <input

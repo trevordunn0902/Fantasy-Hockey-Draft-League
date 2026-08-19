@@ -31,7 +31,7 @@ const ForgotUsername = () => {
   };
 
   return (
-    <div className="create-league-page">
+    <div className="create-league-page auth-page">
       <h1>Forgot Username?</h1>
 
       <p>
@@ -43,7 +43,7 @@ const ForgotUsername = () => {
       {message && <p>{message}</p>}
 
       {!message && (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="auth-form">
           <div>
             <label>Email</label>
             <input
@@ -62,7 +62,7 @@ const ForgotUsername = () => {
 
       <button
         type="button"
-        className="bg-blue-600"
+        className="secondary-button"
         onClick={() => navigate("/login")}
       >
         Back to Login
