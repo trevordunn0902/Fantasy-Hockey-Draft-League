@@ -10,6 +10,9 @@ public class Player {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "nhl_id", unique = true)
+    private Long nhlId;
+
     // Basic Info
     private String name;
 
@@ -53,6 +56,14 @@ public class Player {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getNhlId() {
+        return nhlId;
+    }
+
+    public void setNhlId(Long nhlId) {
+        this.nhlId = nhlId;
     }
 
     public String getName() {

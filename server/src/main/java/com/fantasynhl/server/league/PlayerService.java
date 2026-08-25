@@ -13,7 +13,7 @@ public class PlayerService {
     private PlayerRepository playerRepository;
 
     private static final String[] NHL_TEAMS = {
-        "ANA","ARI","BOS","BUF","CGY","CAR","CHI","COL","CBJ","DAL",
+        "ANA","BOS","BUF","CGY","CAR","CHI","COL","CBJ","DAL",
         "DET","EDM","FLA","LAK","MIN","MTL","NSH","NJD","NYI","NYR",
         "OTT","PHI","PIT","SJS","SEA","STL","TBL","TOR","UTA","VAN","VGK","WSH","WPG"
     };
@@ -31,7 +31,13 @@ public class PlayerService {
         List<Player> existingPlayers = playerRepository.findAll();
         Map<String, Player> playerMap = new HashMap<>();
         for (Player p : existingPlayers) {
-            playerMap.put(p.getName().toLowerCase() + "_" + p.getPositionCode().toUpperCase(), p);
+            String positionCode = p.getPositionCode() != null
+                    ? p.getPositionCode().toUpperCase()
+                    : "";
+
+            String key = p.getName().toLowerCase() + "_" + positionCode;
+
+            playerMap.put(key, p);
         }
 
         for (String team : NHL_TEAMS) {
@@ -74,16 +80,30 @@ public class PlayerService {
 
         for (Map<String, Object> playerMapApi : players) {
             try {
+                // NHL's unique player ID
+                Long nhlId = playerMapApi.get("id") instanceof Number
+                        ? ((Number) playerMapApi.get("id")).longValue()
+                        : null;
+
                 String firstName = playerMapApi.get("firstName") instanceof Map ?
                         (String) ((Map<String, Object>) playerMapApi.get("firstName")).get("default") : "";
+
                 String lastName = playerMapApi.get("lastName") instanceof Map ?
                         (String) ((Map<String, Object>) playerMapApi.get("lastName")).get("default") : "";
+
                 String fullName = (firstName + " " + lastName).trim();
 
                 String positionCode = (String) playerMapApi.get("positionCode");
-                String key = fullName.toLowerCase() + "_" + (positionCode != null ? positionCode.toUpperCase() : "");
+
+                String key = fullName.toLowerCase() + "_"
+                        + (positionCode != null ? positionCode.toUpperCase() : "");
 
                 Player p = playerMap.getOrDefault(key, new Player());
+
+                // NHL identity
+                p.setNhlId(nhlId);
+
+                // Basic information
                 p.setName(fullName);
                 p.setNhlTeam(team);
                 p.setPositionCode(positionCode);
@@ -96,17 +116,26 @@ public class PlayerService {
                     default -> p.setPosition("N/A");
                 }
 
-                // Only update fields necessary for drafting system
+                // Drafting information
                 p.setHeadshotUrl((String) playerMapApi.get("headshot"));
-                p.setSweaterNumber(playerMapApi.get("sweaterNumber") instanceof Number ?
-                        ((Number) playerMapApi.get("sweaterNumber")).intValue() : 0);
 
-                if (!playerMap.containsKey(key)) {
-                    allPlayersFromApi.add(p);
-                }
+                p.setSweaterNumber(
+                        playerMapApi.get("sweaterNumber") instanceof Number
+                                ? ((Number) playerMapApi.get("sweaterNumber")).intValue()
+                                : 0
+                );
+
+                // Add EVERY player to the save list.
+                // This ensures existing players receive their NHL ID.
+                allPlayersFromApi.add(p);
+
+                // Keep the map current
+                playerMap.put(key, p);
 
             } catch (Exception e) {
-                System.err.println(" Skipped player due to parsing error: " + e.getMessage());
+                System.err.println(
+                        "Skipped player due to parsing error: " + e.getMessage()
+                );
             }
         }
     }
