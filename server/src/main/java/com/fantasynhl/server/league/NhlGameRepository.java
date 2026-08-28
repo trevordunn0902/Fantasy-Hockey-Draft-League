@@ -24,15 +24,57 @@ public interface NhlGameRepository extends JpaRepository<NhlGame, Long> {
             String homeTeam
     );
 
-     @Query("""
+    // ==========================================
+    // All upcoming NHL games
+    // ==========================================
+
+    @Query("""
         SELECT g
         FROM NhlGame g
         WHERE g.season = :season
-          AND g.gameDate >= :date
+        AND g.gameDate >= :date
         ORDER BY g.startTimeUtc ASC
-    """)
+        """)
     List<NhlGame> findUpcomingGames(
             @Param("date") LocalDate date,
+            @Param("season") int season
+    );
+
+    // ==========================================
+    // First upcoming game for selected NHL teams
+    // ==========================================
+
+    @Query("""
+        SELECT g
+        FROM NhlGame g
+        WHERE g.season = :season
+        AND g.gameDate >= :date
+        AND (g.awayTeam IN :teams OR g.homeTeam IN :teams)
+        ORDER BY g.gameDate ASC, g.startTimeUtc ASC
+        """)
+    List<NhlGame> findFirstUpcomingGameForTeams(
+            @Param("teams") List<String> teams,
+            @Param("date") LocalDate date,
+            @Param("season") int season
+    );
+
+    // ==========================================
+    // Games for selected NHL teams within a date range
+    // ==========================================
+
+    @Query("""
+        SELECT g
+        FROM NhlGame g
+        WHERE g.season = :season
+        AND g.gameDate >= :startDate
+        AND g.gameDate <= :endDate
+        AND (g.awayTeam IN :teams OR g.homeTeam IN :teams)
+        ORDER BY g.startTimeUtc ASC
+        """)
+    List<NhlGame> findUpcomingGamesForTeams(
+            @Param("teams") List<String> teams,
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate,
             @Param("season") int season
     );
 

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getTeamById, assignPlayerRole } from "../api/api";
 import PlayerCard from "../components/PlayerCard";
+import RosterUpcomingGames from "../components/RosterUpcomingGames";
 import "../styles/pages.css";
 
 const ViewRoster = () => {
@@ -84,6 +85,11 @@ const ViewRoster = () => {
           )) : "None"}
         </p>
       </div>
+
+      <RosterUpcomingGames
+        teamId={teamId}
+        teamName={teamName}
+      />
 
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {players.length ? (

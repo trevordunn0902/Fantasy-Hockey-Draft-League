@@ -16,6 +16,7 @@ public class NhlScheduleService {
 
     private final RestTemplate restTemplate;
     private final NhlGameRepository nhlGameRepository;
+    private final TeamRepository teamRepository;
 
     private static final String SCHEDULE_URL =
             "https://api-web.nhle.com/v1/club-schedule-season/";
@@ -29,8 +30,12 @@ public class NhlScheduleService {
             "STL", "TBL", "TOR", "UTA", "VAN", "VGK", "WPG", "WSH"
     );
 
-    public NhlScheduleService(NhlGameRepository nhlGameRepository) {
+    public NhlScheduleService(
+            NhlGameRepository nhlGameRepository,
+            TeamRepository teamRepository
+    ) {
         this.nhlGameRepository = nhlGameRepository;
+        this.teamRepository = teamRepository;
         this.restTemplate = new RestTemplate();
     }
 
@@ -48,10 +53,10 @@ public class NhlScheduleService {
         int gamesReceived = 0;
 
         /*
-        * Store every unique game returned by the NHL API.
-        * We don't touch the database until all 32 teams
-        * have successfully returned their schedules.
-        */
+         * Store every unique game returned by the NHL API.
+         * We don't touch the database until all 32 teams
+         * have successfully returned their schedules.
+         */
         Map<Long, NhlScheduleGameDTO> fetchedGames = new LinkedHashMap<>();
 
         // ==========================================
@@ -92,10 +97,10 @@ public class NhlScheduleService {
                     }
 
                     /*
-                    * Each game appears in both teams' schedules.
-                    * Using the NHL game ID as the map key
-                    * automatically removes duplicates.
-                    */
+                     * Each game appears in both teams' schedules.
+                     * Using the NHL game ID as the map key
+                     * automatically removes duplicates.
+                     */
                     fetchedGames.put(
                             gameDTO.getId(),
                             gameDTO
@@ -105,11 +110,11 @@ public class NhlScheduleService {
             } catch (Exception e) {
 
                 /*
-                * Abort the entire refresh.
-                *
-                * Most importantly, we have not modified
-                * the database yet.
-                */
+                 * Abort the entire refresh.
+                 *
+                 * Most importantly, we have not modified
+                 * the database yet.
+                 */
                 System.out.println(
                         "=== NHL Schedule Update ABORTED ==="
                 );
@@ -252,6 +257,97 @@ public class NhlScheduleService {
         result.put("gamesDeleted", gamesDeleted);
 
         return result;
+    }
+
+    /**
+     * Find the next 7 days of NHL games for a fantasy team.
+     *
+     * The window begins on the date of the team's earliest
+     * upcoming game, rather than simply using today's date.
+     */
+    public List<NhlGame> getUpcomingGamesForTeam(Long teamId) {
+
+        // ==========================================
+        // Find fantasy team
+        // ==========================================
+
+        Team team = teamRepository.findById(teamId)
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "Team not found: " + teamId
+                        )
+                );
+
+        // ==========================================
+        // Get NHL teams represented on the roster
+        // ==========================================
+
+        List<String> nhlTeams = team.getTeamPlayers()
+                .stream()
+                .map(TeamPlayer::getPlayer)
+                .map(Player::getNhlTeam)
+                .filter(Objects::nonNull)
+                .filter(teamCode -> !teamCode.isBlank())
+                .distinct()
+                .toList();
+
+        if (nhlTeams.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        System.out.println(
+                "Finding upcoming games for fantasy team: "
+                        + team.getName()
+        );
+
+        System.out.println(
+                "NHL teams on roster: " + nhlTeams
+        );
+
+        // ==========================================
+        // Find earliest upcoming game
+        // ==========================================
+
+        LocalDate today = LocalDate.now();
+
+        List<NhlGame> nextGames =
+                nhlGameRepository.findFirstUpcomingGameForTeams(
+                        nhlTeams,
+                        today,
+                        CURRENT_SEASON
+                );
+
+        if (nextGames.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        LocalDate startDate =
+                nextGames.get(0).getGameDate();
+
+        // ==========================================
+        // Build 7-day window
+        // ==========================================
+
+        LocalDate endDate =
+                startDate.plusDays(6);
+
+        System.out.println(
+                "Roster game window: "
+                        + startDate
+                        + " through "
+                        + endDate
+        );
+
+        // ==========================================
+        // Fetch games within window
+        // ==========================================
+
+        return nhlGameRepository.findUpcomingGamesForTeams(
+                nhlTeams,
+                startDate,
+                endDate,
+                CURRENT_SEASON
+        );
     }
 
     /**

@@ -33,17 +33,43 @@ public class NhlScheduleController {
         return ResponseEntity.ok(result);
     }
 
+    /**
+     * Get all upcoming NHL games.
+     *
+     * Used for general NHL schedule displays.
+     */
     @GetMapping("/upcoming")
-    public ResponseEntity<List<NhlGame>> getUpcomingGames(@RequestParam(defaultValue = "10") int limit) {
+    public ResponseEntity<List<NhlGame>> getUpcomingGames(
+            @RequestParam(defaultValue = "10") int limit
+    ) {
 
         List<NhlGame> games =
                 nhlGameRepository.findUpcomingGames(
                         LocalDate.now(),
                         CURRENT_SEASON
                 );
-         if (games.size() > limit) {
+
+        if (games.size() > limit) {
             games = games.subList(0, limit);
         }
+
+        return ResponseEntity.ok(games);
+    }
+
+    /**
+     * Get the next 7-day schedule for a fantasy team's roster.
+     *
+     * The service determines the earliest upcoming game
+     * involving any NHL team represented on the roster,
+     * then returns games from that date through six days later.
+     */
+    @GetMapping("/team/{teamId}/upcoming")
+    public ResponseEntity<List<NhlGame>> getUpcomingGamesForTeam(
+            @PathVariable Long teamId
+    ) {
+
+        List<NhlGame> games =
+                nhlScheduleService.getUpcomingGamesForTeam(teamId);
 
         return ResponseEntity.ok(games);
     }

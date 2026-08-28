@@ -203,3 +203,15 @@ export const getUpcomingGames = async (limit = 10) => {
     throw err.response?.data || { message: "Failed to fetch upcoming games" };
   }
 };
+
+// Get the upcoming games for the NHL teams represented on a fantasy roster
+export const getUpcomingGamesForTeam = async (teamId) => {
+  try {
+    const response = await API.get(`/nhl/schedule/team/${teamId}/upcoming`);
+    return response.data;
+  } catch (err) {
+    throw err.response?.data || {
+      message: "Failed to get upcoming roster games",
+    };
+  }
+};
