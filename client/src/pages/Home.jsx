@@ -3,6 +3,7 @@ import React, { useEffect, useState, useContext } from "react";
 import LeagueCard from "../components/LeagueCard";
 import { AuthContext } from "../context/AuthContext";
 import { getAllLeagues } from "../api/api";
+import UpcomingGames from "../components/UpcomingGames";
 import "../styles/pages.css";
 
 const Home = () => {
@@ -33,6 +34,8 @@ const Home = () => {
           <LeagueCard key={league.id} league={league} />
         ))}
       </div>
+
+      <UpcomingGames />
     </div>
   );
 };

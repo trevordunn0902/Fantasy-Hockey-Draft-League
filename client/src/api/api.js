@@ -191,3 +191,15 @@ export const getTeamById = async (teamId) => {
     throw err.response?.data || { message: "Failed to get team by ID" };
   }
 };
+
+// --- NHL Schedule ---
+export const getUpcomingGames = async (limit = 10) => {
+  try {
+    const response = await API.get("/nhl/schedule/upcoming", {
+      params: { limit },
+    });
+    return response.data;
+  } catch (err) {
+    throw err.response?.data || { message: "Failed to fetch upcoming games" };
+  }
+};
