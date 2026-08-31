@@ -1,0 +1,220 @@
+.roster-schedule {
+  width: 100%;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  border-radius: 16px;
+
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Header */
+
+.roster-schedule-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 1.5rem;
+}
+
+.roster-schedule-header h2 {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.roster-schedule-header p {
+  margin: 0.25rem 0 0;
+  font-size: 0.9rem;
+  opacity: 0.6;
+}
+
+.roster-schedule-count {
+  padding: 0.4rem 0.75rem;
+
+  border-radius: 999px;
+
+  background: rgba(59, 130, 246, 0.12);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* Date groups */
+
+.roster-schedule-day {
+  margin-bottom: 1.25rem;
+}
+
+.roster-schedule-day:last-child {
+  margin-bottom: 0;
+}
+
+.roster-schedule-day-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+
+  margin-bottom: 0.6rem;
+  padding-left: 0.25rem;
+}
+
+.roster-schedule-weekday {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.roster-schedule-date {
+  font-size: 0.8rem;
+  opacity: 0.55;
+}
+
+/* Games */
+
+.roster-schedule-day-games {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.roster-game {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+
+  min-height: 72px;
+  padding: 0.8rem 1rem;
+
+  border-radius: 12px;
+
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.roster-game:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+/* Teams */
+
+.roster-game-team {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.roster-game-away {
+  justify-content: flex-end;
+}
+
+.roster-game-home {
+  justify-content: flex-start;
+}
+
+.roster-game-abbreviation {
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.roster-game-label {
+  font-size: 0.7rem;
+  opacity: 0.45;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Team Logos */
+
+.roster-game-logo {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+/* Center */
+
+.roster-game-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.1rem;
+
+  min-width: 75px;
+}
+
+.roster-game-time {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.roster-game-at {
+  font-size: 0.7rem;
+  opacity: 0.4;
+}
+
+/* Loading / empty states */
+
+.roster-schedule-status {
+  padding: 1.5rem 0;
+  text-align: center;
+
+  font-size: 0.9rem;
+  opacity: 0.6;
+}
+
+/* Mobile */
+
+@media (max-width: 600px) {
+  .roster-schedule {
+    padding: 1rem;
+  }
+
+  .roster-schedule-header {
+    align-items: flex-start;
+  }
+
+  .roster-schedule-header h2 {
+    font-size: 1.15rem;
+  }
+
+  .roster-game {
+    min-height: 64px;
+    padding: 0.7rem;
+  }
+
+  .roster-game-abbreviation {
+    font-size: 1rem;
+  }
+
+  .roster-game-center {
+    min-width: 60px;
+  }
+
+  .roster-game-time {
+    font-size: 0.75rem;
+  }
+
+  .roster-game-logo {
+    width: 48px;
+    height: 48px;
+  }
+}
